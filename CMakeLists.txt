@@ -26,7 +26,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/binary_to_gray.sv
     # ${PROJECT_SOURCE_DIR}/src/cb_filter_pkg.sv
     # ${PROJECT_SOURCE_DIR}/src/cc_onehot.sv
-    ${PROJECT_SOURCE_DIR}/src/cf_math_pkg.sv
+    # ${PROJECT_SOURCE_DIR}/src/cf_math_pkg.sv
     # ${PROJECT_SOURCE_DIR}/src/clk_int_div.sv
     # ${PROJECT_SOURCE_DIR}/src/delta_counter.sv
     # ${PROJECT_SOURCE_DIR}/src/ecc_pkg.sv
@@ -60,7 +60,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/stream_mux.sv
     # ${PROJECT_SOURCE_DIR}/src/stream_throttle.sv
     # ${PROJECT_SOURCE_DIR}/src/sub_per_hash.sv
-    # ${PROJECT_SOURCE_DIR}/src/sync.sv
+    ${PROJECT_SOURCE_DIR}/src/sync.sv
     # ${PROJECT_SOURCE_DIR}/src/sync_wedge.sv # Reference to pulp_clock_gating (not defined)
     # ${PROJECT_SOURCE_DIR}/src/unread.sv
     # ${PROJECT_SOURCE_DIR}/src/read.sv
@@ -97,6 +97,8 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/stream_xbar.sv # unsupported 'parameter type' by TMRG
     # Level 3
     # ${PROJECT_SOURCE_DIR}/src/cdc_fifo_gray_clearable.sv
+    ${PROJECT_SOURCE_DIR}/src/cdc_2phase_dst_clearable.sv
+    ${PROJECT_SOURCE_DIR}/src/cdc_2phase_src_clearable.sv
     ${PROJECT_SOURCE_DIR}/src/cdc_2phase_clearable.sv
     # ${PROJECT_SOURCE_DIR}/src/mem_to_banks_detailed.sv
     # ${PROJECT_SOURCE_DIR}/src/stream_arbiter.sv # not compiling standalone xcelium
