@@ -15,7 +15,7 @@
 /// Wrapper around the flushable spill register to maintain back-ward
 /// compatibility.
 module spill_register #(
-  parameter type T      = logic,
+  parameter int unsigned T = 1,
   parameter bit  Bypass = 1'b0     // make this spill register transparent
 ) (
   input  logic clk_i   ,
