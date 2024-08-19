@@ -98,13 +98,13 @@ module addr_decode #(
     // .rule_t    ( rule_t    ),
     .Napot     ( Napot     )
   ) i_addr_decode_dync (
-    .addr_i,
-    .addr_map_i,
-    .idx_o,
-    .dec_valid_o,
-    .dec_error_o,
-    .en_default_idx_i,
-    .default_idx_i,
+    .addr_i(addr_i),
+    .addr_map_i(addr_map_i),
+    .idx_o(idx_o),
+    .dec_valid_o(dec_valid_o),
+    .dec_error_o(dec_error_o),
+    .en_default_idx_i(en_default_idx_i),
+    .default_idx_i(default_idx_i),
     .config_ongoing_i ( 1'b0 )
   );
 

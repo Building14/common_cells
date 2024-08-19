@@ -109,6 +109,7 @@ module rr_arb_tree #(
   output logic [IdxWidth-1:0]                idx_o
 );
 
+  // tmrg copy start
   `ifndef SYNTHESIS
   `ifndef COMMON_CELLS_ASSERTS_OFF
   `ifndef VERILATOR
@@ -119,6 +120,7 @@ module rr_arb_tree #(
   `endif
   `endif
   `endif
+  // tmrg copy stop
 
   // just pass through in this corner case
   if (NumIn == unsigned'(1)) begin : gen_pass_through
@@ -170,6 +172,7 @@ module rr_arb_tree #(
           end
         end
 
+        // tmrg copy start
         `ifndef SYNTHESIS
         `ifndef COMMON_CELLS_ASSERTS_OFF
           lock: assert property(
@@ -187,6 +190,7 @@ module rr_arb_tree #(
                             enabled.");
         `endif
         `endif
+        // tmrg copy stop
 
         always_ff @(posedge clk_i or negedge rst_ni) begin : p_req_regs
           if (!rst_ni) begin
@@ -310,6 +314,7 @@ module rr_arb_tree #(
       end
     end
 
+    // tmrg copy start
     `ifndef SYNTHESIS
     `ifndef COMMON_CELLS_ASSERTS_OFF
     `ifndef XSIM
@@ -346,6 +351,7 @@ module rr_arb_tree #(
     `endif
     `endif
     `endif
+    // tmrg copy stop
   end
 
 endmodule : rr_arb_tree

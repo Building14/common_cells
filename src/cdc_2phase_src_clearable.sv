@@ -23,8 +23,8 @@ module cdc_2phase_src_clearable #(
   sync #(
     .STAGES(SYNC_STAGES)
   ) i_sync(
-    .clk_i,
-    .rst_ni,
+    .clk_i(clk_i),
+    .rst_ni(rst_ni),
     .serial_i( async_ack_i ),
     .serial_o( ack_synced  )
   );
@@ -43,7 +43,9 @@ module cdc_2phase_src_clearable #(
     end
   end
 
+  // tmrg copy start
   `FFNR(data_src_q, data_src_d, clk_i)
+  // tmrg copy stop
 
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -58,6 +60,7 @@ module cdc_2phase_src_clearable #(
   assign async_req_o = req_src_q;
   assign async_data_o = data_src_q;
 
+// tmrg copy start
 // Assertions
 `ifndef COMMON_CELLS_ASSERTS_OFF
   `ifndef SYNTHESIS
@@ -67,5 +70,6 @@ module cdc_2phase_src_clearable #(
 
   `endif
 `endif
+// tmrg copy stop
 
 endmodule

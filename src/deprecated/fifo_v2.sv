@@ -54,19 +54,20 @@ module fifo_v2 #(
         .DEPTH        ( DEPTH        )
         // .dtype        ( dtype        )
     ) i_fifo_v3 (
-        .clk_i,
-        .rst_ni,
-        .flush_i,
-        .testmode_i,
-        .full_o,
-        .empty_o,
+        .clk_i(clk_i),
+        .rst_ni(rst_ni),
+        .flush_i(flush_i),
+        .testmode_i(testmode_i),
+        .full_o(full_o),
+        .empty_o(empty_o),
         .usage_o (usage),
-        .data_i,
-        .push_i,
-        .data_o,
-        .pop_i
+        .data_i(data_i),
+        .push_i(push_i),
+        .data_o(data_o),
+        .pop_i(pop_i)
     );
 
+    // tmrg copy start
     `ifndef SYNTHESIS
     `ifndef COMMON_CELLS_ASSERTS_OFF
         initial begin
@@ -75,5 +76,6 @@ module fifo_v2 #(
         end
     `endif
     `endif
+    // tmrg copy stop
 
 endmodule // fifo_v2

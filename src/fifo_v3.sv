@@ -137,6 +137,7 @@ module fifo_v3 #(
         end
     end
 
+// tmrg copy start
 `ifndef SYNTHESIS
 `ifndef COMMON_CELLS_ASSERTS_OFF
     initial begin
@@ -152,5 +153,6 @@ module fifo_v3 #(
         else $fatal (1, "Trying to pop data although the FIFO is empty.");
 `endif
 `endif
+// tmrg copy stop
 
 endmodule // fifo_v3

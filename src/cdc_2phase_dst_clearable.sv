@@ -26,8 +26,8 @@ module cdc_2phase_dst_clearable #(
   sync #(
     .STAGES(SYNC_STAGES)
   ) i_sync(
-    .clk_i,
-    .rst_ni,
+    .clk_i(clk_i),
+    .rst_ni(rst_ni),
     .serial_i( async_req_i ),
     .serial_o( req_synced  )
   );
@@ -51,7 +51,9 @@ module cdc_2phase_dst_clearable #(
     end
   end
 
+  // tmrg copy start
   `FFNR(data_dst_q, data_dst_d, clk_i)
+  // tmrg copy stop
 
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin

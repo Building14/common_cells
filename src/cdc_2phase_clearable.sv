@@ -47,7 +47,7 @@
 ///
 ///
 
-`include "common_cells/registers.svh"
+// `include "common_cells/registers.svh"
 
 module cdc_2phase_clearable #(
   // parameter type T = logic,
@@ -81,6 +81,7 @@ module cdc_2phase_clearable #(
   logic        s_dst_isolate_req;
   logic        s_dst_isolate_ack_q;
 
+  // tmrg copy start
   // Asynchronous handshake signals between the CDCs
   (* dont_touch = "true" *) logic async_req;
   (* dont_touch = "true" *) logic async_ack;
@@ -95,6 +96,7 @@ module cdc_2phase_clearable #(
       $error("A minimum of 2 synchronizer stages is required for proper functionality.");
     end
   end
+  // tmrg copy stop
 
 
   // The sender in the source domain.
@@ -183,7 +185,7 @@ module cdc_2phase_clearable #(
   // clear sequence.
   assign dst_clear_pending_o = s_dst_isolate_req;
 
-
+// tmrg copy start
 `ifndef COMMON_CELLS_ASSERTS_OFF
 
   no_valid_i_during_clear_i : assert property (
@@ -191,6 +193,7 @@ module cdc_2phase_clearable #(
   );
 
 `endif
+// tmrg copy stop
 
 endmodule
 

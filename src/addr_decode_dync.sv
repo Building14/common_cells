@@ -121,6 +121,7 @@ module addr_decode_dync #(
     end
   end
 
+  // tmrg copy start
   // Assumptions and assertions
   `ifndef COMMON_CELLS_ASSERTS_OFF
   `ifndef XSIM
@@ -187,5 +188,6 @@ module addr_decode_dync #(
   `endif
   `endif
   `endif
+  // tmrg copy stop
 
 endmodule
