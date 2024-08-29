@@ -1,6 +1,6 @@
 /// Half of the two-phase clock domain crossing located in the source domain.
 
-`include "common_cells/registers.svh"
+`include "registers.svh"
 
 module cdc_2phase_src_clearable #(
 //   parameter type T = logic,

@@ -15,7 +15,7 @@ add_ip(common_cells
 # include/common_cells/registers.svh
 # include/common_cells/assertions.svh
 ip_include_directories(${IP} SYSTEMVERILOG
-    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/include/common_cells
 )
 
 ip_sources(${IP} SYSTEMVERILOG
