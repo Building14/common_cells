@@ -1,5 +1,8 @@
 /// Half of the two-phase clock domain crossing located in the destination
 /// domain.
+
+`include "common_cells/registers.svh"
+
 module cdc_2phase_dst_clearable #(
 //   parameter type T = logic,
   parameter int unsigned SYNC_STAGES = 2
