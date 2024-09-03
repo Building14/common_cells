@@ -4,18 +4,20 @@
 `include "registers.svh"
 
 module cdc_2phase_dst_clearable #(
-//   parameter type T = logic,
+// tmrg copy start
+  parameter type T = logic,
+// tmrg copy stop
   parameter int unsigned SYNC_STAGES = 2
 )(
   input  logic rst_ni,
   input  logic clk_i,
   input  logic clear_i,
-  output logic     data_o,
+  output T     data_o,
   output logic valid_o,
   input  logic ready_i,
   input  logic async_req_i,
   output logic async_ack_o,
-  input  logic     async_data_i
+  input  T     async_data_i
 );
 
   (* dont_touch = "true" *)

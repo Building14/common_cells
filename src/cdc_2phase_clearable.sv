@@ -50,7 +50,9 @@
 `include "registers.svh"
 
 module cdc_2phase_clearable #(
-  // parameter type T = logic,
+// tmrg copy start
+  parameter type T = logic,
+// tmrg copy stop
   parameter int unsigned SYNC_STAGES = 3,
   parameter int CLEAR_ON_ASYNC_RESET = 1
 )(
@@ -58,7 +60,7 @@ module cdc_2phase_clearable #(
   input  logic src_clk_i,
   input  logic src_clear_i,
   output logic src_clear_pending_o,
-  input  logic     src_data_i,
+  input  T     src_data_i,
   input  logic src_valid_i,
   output logic src_ready_o,
 
@@ -66,7 +68,7 @@ module cdc_2phase_clearable #(
   input  logic dst_clk_i,
   input  logic dst_clear_i,
   output logic dst_clear_pending_o,
-  output logic     dst_data_o,
+  output T     dst_data_o,
   output logic dst_valid_o,
   input  logic dst_ready_i
 );
@@ -85,7 +87,7 @@ module cdc_2phase_clearable #(
   // Asynchronous handshake signals between the CDCs
   (* dont_touch = "true" *) logic async_req;
   (* dont_touch = "true" *) logic async_ack;
-  (* dont_touch = "true" *) logic async_data;
+  (* dont_touch = "true" *) T async_data;
 
   if (CLEAR_ON_ASYNC_RESET) begin : gen_elaboration_assertion
     if (SYNC_STAGES < 3)
@@ -101,7 +103,7 @@ module cdc_2phase_clearable #(
 
   // The sender in the source domain.
   cdc_2phase_src_clearable #(
-    // .T           ( T           ),
+    .T           ( T           ),
     .SYNC_STAGES ( SYNC_STAGES )
   ) i_src (
     .rst_ni       ( src_rst_ni                       ),
@@ -120,7 +122,7 @@ module cdc_2phase_clearable #(
 
   // The receiver in the destination domain.
   cdc_2phase_dst_clearable #(
-    // .T           ( T           ),
+    .T           ( T           ),
     .SYNC_STAGES ( SYNC_STAGES )
   ) i_dst (
     .rst_ni       ( dst_rst_ni                       ),
@@ -185,7 +187,7 @@ module cdc_2phase_clearable #(
   // clear sequence.
   assign dst_clear_pending_o = s_dst_isolate_req;
 
-// tmrg copy start
+// tmrg ignore start
 `ifndef COMMON_CELLS_ASSERTS_OFF
 
   no_valid_i_during_clear_i : assert property (
@@ -193,7 +195,7 @@ module cdc_2phase_clearable #(
   );
 
 `endif
-// tmrg copy stop
+// tmrg ignore stop
 
 endmodule
 
