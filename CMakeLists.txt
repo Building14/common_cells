@@ -28,7 +28,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/cc_onehot.sv
     # ${PROJECT_SOURCE_DIR}/src/cf_math_pkg.sv
     # ${PROJECT_SOURCE_DIR}/src/clk_int_div.sv
-    # ${PROJECT_SOURCE_DIR}/src/delta_counter.sv
+    ${PROJECT_SOURCE_DIR}/src/delta_counter.sv
     # ${PROJECT_SOURCE_DIR}/src/ecc_pkg.sv
     # ${PROJECT_SOURCE_DIR}/src/edge_propagator_tx.sv
     # ${PROJECT_SOURCE_DIR}/src/exp_backoff.sv
@@ -64,14 +64,14 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/sync_wedge.sv # Reference to pulp_clock_gating (not defined)
     # ${PROJECT_SOURCE_DIR}/src/unread.sv
     # ${PROJECT_SOURCE_DIR}/src/read.sv
-    # ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr_pkg.sv
+    ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr_pkg.sv
     # Level 1
     ${PROJECT_SOURCE_DIR}/src/addr_decode_dync.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_2phase.sv
-    # ${PROJECT_SOURCE_DIR}/src/cdc_4phase.sv
+    ${PROJECT_SOURCE_DIR}/src/cdc_4phase.sv
     # ${PROJECT_SOURCE_DIR}/src/cb_filter.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_fifo_2phase.sv
-    # ${PROJECT_SOURCE_DIR}/src/counter.sv
+    ${PROJECT_SOURCE_DIR}/src/counter.sv
     # ${PROJECT_SOURCE_DIR}/src/ecc_decode.sv
     # ${PROJECT_SOURCE_DIR}/src/ecc_encode.sv
     # ${PROJECT_SOURCE_DIR}/src/edge_detect.sv # Reference so sync_wedge
@@ -86,7 +86,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # Level 2
     ${PROJECT_SOURCE_DIR}/src/addr_decode.sv
     # ${PROJECT_SOURCE_DIR}/src/addr_decode_napot.sv
-    # ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr.sv
+    ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_fifo_gray.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/fall_through_register.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/id_queue.sv # unsupported 'parameter type' by TMRG
