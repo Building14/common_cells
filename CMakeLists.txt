@@ -23,6 +23,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # package. Files in level 1 only depend on files in level 0, files in level 2 on files in
     # levels 1 and 0, etc. Files within a level are ordered alphabetically.
     # Level 0
+    ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr_pkg.sv
     # ${PROJECT_SOURCE_DIR}/src/binary_to_gray.sv
     # ${PROJECT_SOURCE_DIR}/src/cb_filter_pkg.sv
     # ${PROJECT_SOURCE_DIR}/src/cc_onehot.sv
@@ -64,7 +65,6 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/sync_wedge.sv # Reference to pulp_clock_gating (not defined)
     # ${PROJECT_SOURCE_DIR}/src/unread.sv
     # ${PROJECT_SOURCE_DIR}/src/read.sv
-    ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr_pkg.sv
     # Level 1
     ${PROJECT_SOURCE_DIR}/src/addr_map_rule_pkg.sv
     ${PROJECT_SOURCE_DIR}/src/addr_decode_dync.sv
