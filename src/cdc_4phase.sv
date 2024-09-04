@@ -185,7 +185,7 @@ module cdc_4phase_src #(
         data_src_q <= RESET_MSG;
       end else begin
         req_src_q  <= 1'b0;
-        data_src_q <= '0;
+        data_src_q <= cdc_reset_ctrlr_pkg::clear_seq_phase_e'('0);
       end
     end else begin
       req_src_q  <= req_src_d;
