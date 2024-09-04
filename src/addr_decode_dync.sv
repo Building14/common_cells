@@ -72,11 +72,11 @@ module addr_decode_dync #(
   // parameter type         idx_t     = logic [IdxWidth-1:0]
 ) (
   /// Address to decode.
-  input  logic               addr_i,
+  input  logic [31:0]              addr_i,
   /// Address map: rule with the highest array position wins on collision
-  input  logic [NoRules-1:0] addr_map_i,
+  input  addr_map_rule_pkg::addr_map_rule_t [NoRules-1:0] addr_map_i,
   /// Decoded index.
-  output logic [IdxWidth-1:0]                idx_o,
+  output logic [IdxWidth-1:0] idx_o,
   /// Decode is valid.
   output logic                dec_valid_o,
   /// Decode is not valid, no matching rule found.
@@ -90,12 +90,14 @@ module addr_decode_dync #(
   /// When `en_default_idx_i` is `1`, this will be the index when no rule matches.
   ///
   /// When not used, tie to `0`.
-  input  logic [IdxWidth-1:0]                default_idx_i,
+  input  logic [IdxWidth-1:0] default_idx_i,
   /// The module is dynamically configured, this deactivates its output and the integrated
   /// assertions.
   input  logic                config_ongoing_i
 );
+  // tmrg do_not_touch
 
+  typedef logic [IdxWidth-1:0] idx_t;
   logic [NoRules-1:0] matched_rules; // purely for address map debugging
 
   always_comb begin
@@ -116,11 +118,11 @@ module addr_decode_dync #(
         matched_rules[i] = ~config_ongoing_i;
         dec_valid_o      = ~config_ongoing_i;
         dec_error_o      = 1'b0;
-        idx_o            = config_ongoing_i ? default_idx_i : IdxWidth'(addr_map_i[i].idx);
+        idx_o            = config_ongoing_i ? default_idx_i : idx_t'(addr_map_i[i].idx);
       end
     end
   end
-
+  
   // tmrg copy start
   // Assumptions and assertions
   `ifndef COMMON_CELLS_ASSERTS_OFF
@@ -189,5 +191,6 @@ module addr_decode_dync #(
   `endif
   `endif
   // tmrg copy stop
+
 
 endmodule

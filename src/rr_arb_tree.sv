@@ -81,7 +81,8 @@ module rr_arb_tree #(
   parameter int unsigned IdxWidth   = (NumIn > 32'd1) ? unsigned'($clog2(NumIn)) : 32'd1
   /// Dependent parameter, do **not** overwrite.
   /// Type for defining the arbitration priority and arbitrated index signal.
-  // parameter type         idx_t      = logic [IdxWidth-1:0]
+  // commented out due to tmrg unsupported
+  //parameter type         idx_t      = logic [IdxWidth-1:0]
 ) (
   /// Clock, positive edge triggered.
   input  logic                clk_i,
@@ -109,7 +110,10 @@ module rr_arb_tree #(
   output logic [IdxWidth-1:0]                idx_o
 );
 
-  // tmrg copy start
+  typedef logic [IdxWidth-1:0] idx_t;
+  typedef logic [DataWidth-1:0] DataType;
+
+  // tmrg ignore start
   `ifndef SYNTHESIS
   `ifndef COMMON_CELLS_ASSERTS_OFF
   `ifndef VERILATOR
@@ -120,7 +124,7 @@ module rr_arb_tree #(
   `endif
   `endif
   `endif
-  // tmrg copy stop
+  // tmrg ignore stop
 
   // just pass through in this corner case
   if (NumIn == unsigned'(1)) begin : gen_pass_through
@@ -133,12 +137,17 @@ module rr_arb_tree #(
     localparam int unsigned NumLevels = unsigned'($clog2(NumIn));
 
     /* verilator lint_off UNOPTFLAT */
-    logic [IdxWidth-1:0]    [2**NumLevels-2:0] index_nodes; // used to propagate the indices
-    logic [DataWidth-1:0] [2**NumLevels-2:0] data_nodes;  // used to propagate the data
+    idx_t    [2**NumLevels-2:0] index_nodes; // used to propagate the indices
+    DataType [2**NumLevels-2:0] data_nodes;  // used to propagate the data
     logic    [2**NumLevels-2:0] gnt_nodes;   // used to propagate the grant to masters
     logic    [2**NumLevels-2:0] req_nodes;   // used to propagate the requests to slave
     /* lint_off */
-    logic [IdxWidth-1:0]                       rr_q;
+    idx_t                       rr_q;
+
+    // voted signals for triplication
+    wire idx_t                  rr_qVoted;
+    assign rr_qVoted = rr_q;
+
     logic [NumIn-1:0]           req_d;
 
     // the final arbitration decision can be taken from the root of the tree
@@ -150,15 +159,21 @@ module rr_arb_tree #(
       assign rr_q       = rr_i;
       assign req_d      = req_i;
     end else begin : gen_int_rr
-      logic [IdxWidth-1:0] rr_d;
+      idx_t rr_d;
 
       // lock arbiter decision in case we got at least one req and no acknowledge
       if (LockIn) begin : gen_lock
         logic  lock_d, lock_q;
         logic [NumIn-1:0] req_q;
 
+        // voted signals for triplication
+        wire lock_qVoted;
+        wire req_qVoted;
+        assign  lock_qVoted = lock_q;
+        assign  req_qVoted = req_q;
+
         assign lock_d     = req_o & ~gnt_i;
-        assign req_d      = (lock_q) ? req_q : req_i;
+        assign req_d      = (lock_qVoted) ? req_qVoted : req_i;
 
         always_ff @(posedge clk_i or negedge rst_ni) begin : p_lock_reg
           if (!rst_ni) begin
@@ -171,8 +186,7 @@ module rr_arb_tree #(
             end
           end
         end
-
-        // tmrg copy start
+        // tmrg ignore start
         `ifndef SYNTHESIS
         `ifndef COMMON_CELLS_ASSERTS_OFF
           lock: assert property(
@@ -190,7 +204,7 @@ module rr_arb_tree #(
                             enabled.");
         `endif
         `endif
-        // tmrg copy stop
+        // tmrg ignore stop
 
         always_ff @(posedge clk_i or negedge rst_ni) begin : p_req_regs
           if (!rst_ni) begin
@@ -209,12 +223,12 @@ module rr_arb_tree #(
 
       if (FairArb) begin : gen_fair_arb
         logic [NumIn-1:0] upper_mask,  lower_mask;
-        logic [IdxWidth-1:0]             upper_idx,   lower_idx,   next_idx;
+        idx_t             upper_idx,   lower_idx,   next_idx;
         logic             upper_empty, lower_empty;
 
         for (genvar i = 0; i < NumIn; i++) begin : gen_mask
-          assign upper_mask[i] = (i >  rr_q) ? req_d[i] : 1'b0;
-          assign lower_mask[i] = (i <= rr_q) ? req_d[i] : 1'b0;
+          assign upper_mask[i] = (i >  rr_qVoted) ? req_d[i] : 1'b0;
+          assign lower_mask[i] = (i <= rr_qVoted) ? req_d[i] : 1'b0;
         end
 
         lzc #(
@@ -236,10 +250,10 @@ module rr_arb_tree #(
         );
 
         assign next_idx = upper_empty      ? lower_idx : upper_idx;
-        assign rr_d     = (gnt_i && req_o) ? next_idx  : rr_q;
+        assign rr_d     = (gnt_i && req_o) ? next_idx  : rr_qVoted;
 
       end else begin : gen_unfair_arb
-        assign rr_d = (gnt_i && req_o) ? ((rr_q == IdxWidth'(NumIn-1)) ? '0 : rr_q + 1'b1) : rr_q;
+        assign rr_d = (gnt_i && req_o) ? ((rr_qVoted == idx_t'(NumIn-1)) ? '0 : rr_qVoted + 1'b1) : rr_qVoted;
       end
 
       // this holds the highest priority
@@ -274,9 +288,9 @@ module rr_arb_tree #(
             assign req_nodes[Idx0]   = req_d[l*2] | req_d[l*2+1];
 
             // arbitration: round robin
-            assign sel =  ~req_d[l*2] | req_d[l*2+1] & rr_q[NumLevels-1-level];
+            assign sel =  ~req_d[l*2] | req_d[l*2+1] & rr_qVoted[NumLevels-1-level];
 
-            assign index_nodes[Idx0] = IdxWidth'(sel);
+            assign index_nodes[Idx0] = idx_t'(sel);
             assign data_nodes[Idx0]  = (sel) ? data_i[l*2+1] : data_i[l*2];
             assign gnt_o[l*2]        = gnt_nodes[Idx0] & (AxiVldRdy | req_d[l*2])   & ~sel;
             assign gnt_o[l*2+1]      = gnt_nodes[Idx0] & (AxiVldRdy | req_d[l*2+1]) & sel;
@@ -291,8 +305,8 @@ module rr_arb_tree #(
           // if index is out of range, fill up with zeros (will get pruned)
           if (unsigned'(l) * 2 > NumIn-1) begin : gen_out_of_range
             assign req_nodes[Idx0]   = 1'b0;
-            assign index_nodes[Idx0] = IdxWidth'('0);
-            assign data_nodes[Idx0]  = DataWidth'('0);
+            assign index_nodes[Idx0] = idx_t'('0);
+            assign data_nodes[Idx0]  = DataType'('0);
           end
         //////////////////////////////////////////////////////////////
         // general case for other levels within the tree
@@ -300,11 +314,11 @@ module rr_arb_tree #(
           assign req_nodes[Idx0]   = req_nodes[Idx1] | req_nodes[Idx1+1];
 
           // arbitration: round robin
-          assign sel =  ~req_nodes[Idx1] | req_nodes[Idx1+1] & rr_q[NumLevels-1-level];
+          assign sel =  ~req_nodes[Idx1] | req_nodes[Idx1+1] & rr_qVoted[NumLevels-1-level];
 
           assign index_nodes[Idx0] = (sel) ?
-            IdxWidth'({1'b1, index_nodes[Idx1+1][NumLevels-unsigned'(level)-2:0]}) :
-            IdxWidth'({1'b0, index_nodes[Idx1][NumLevels-unsigned'(level)-2:0]});
+            idx_t'({1'b1, index_nodes[Idx1+1][NumLevels-unsigned'(level)-2:0]}) :
+            idx_t'({1'b0, index_nodes[Idx1][NumLevels-unsigned'(level)-2:0]});
 
           assign data_nodes[Idx0]  = (sel) ? data_nodes[Idx1+1] : data_nodes[Idx1];
           assign gnt_nodes[Idx1]   = gnt_nodes[Idx0] & ~sel;
@@ -314,7 +328,8 @@ module rr_arb_tree #(
       end
     end
 
-    // tmrg copy start
+
+    // tmrg ignore start
     `ifndef SYNTHESIS
     `ifndef COMMON_CELLS_ASSERTS_OFF
     `ifndef XSIM
@@ -351,7 +366,7 @@ module rr_arb_tree #(
     `endif
     `endif
     `endif
-    // tmrg copy stop
+    // tmrg ignore stop
   end
 
 endmodule : rr_arb_tree

@@ -66,9 +66,10 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/read.sv
     ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr_pkg.sv
     # Level 1
+    ${PROJECT_SOURCE_DIR}/src/addr_map_rule_pkg.sv
     ${PROJECT_SOURCE_DIR}/src/addr_decode_dync.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_2phase.sv
-    ${PROJECT_SOURCE_DIR}/src/cdc_4phase.sv
+    # ${PROJECT_SOURCE_DIR}/src/cdc_4phase.sv
     # ${PROJECT_SOURCE_DIR}/src/cb_filter.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_fifo_2phase.sv
     ${PROJECT_SOURCE_DIR}/src/counter.sv
@@ -86,7 +87,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # Level 2
     ${PROJECT_SOURCE_DIR}/src/addr_decode.sv
     # ${PROJECT_SOURCE_DIR}/src/addr_decode_napot.sv
-    ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr.sv
+    # ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_fifo_gray.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/fall_through_register.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/id_queue.sv # unsupported 'parameter type' by TMRG
