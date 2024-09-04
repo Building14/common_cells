@@ -76,7 +76,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/ecc_decode.sv
     # ${PROJECT_SOURCE_DIR}/src/ecc_encode.sv
     # ${PROJECT_SOURCE_DIR}/src/edge_detect.sv # Reference so sync_wedge
-    # ${PROJECT_SOURCE_DIR}/src/lzc.sv
+    ${PROJECT_SOURCE_DIR}/src/lzc.sv
     # ${PROJECT_SOURCE_DIR}/src/max_counter.sv
     # ${PROJECT_SOURCE_DIR}/src/rstgen.sv
     # ${PROJECT_SOURCE_DIR}/src/spill_register.sv # unsupported 'parameter type' by TMRG
