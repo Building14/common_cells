@@ -46,7 +46,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/plru_tree.sv
     # ${PROJECT_SOURCE_DIR}/src/passthrough_stream_fifo.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/popcount.sv
-    # ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
+    ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
     # ${PROJECT_SOURCE_DIR}/src/rstgen_bypass.sv
     # ${PROJECT_SOURCE_DIR}/src/serial_deglitch.sv
     # ${PROJECT_SOURCE_DIR}/src/shift_reg.sv # unsupported 'parameter type' by TMRG
