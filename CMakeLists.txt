@@ -50,7 +50,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/serial_deglitch.sv
     # ${PROJECT_SOURCE_DIR}/src/shift_reg.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/shift_reg_gated.sv # unsupported 'parameter type' by TMRG
-    # ${PROJECT_SOURCE_DIR}/src/spill_register_flushable.sv # unsupported 'parameter type' by TMRG
+    ${PROJECT_SOURCE_DIR}/src/spill_register_flushable.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/stream_demux.sv
     # ${PROJECT_SOURCE_DIR}/src/stream_filter.sv
     # ${PROJECT_SOURCE_DIR}/src/stream_fork.sv
@@ -69,7 +69,7 @@ ip_sources(${IP} SYSTEMVERILOG
     ${PROJECT_SOURCE_DIR}/src/addr_map_rule_pkg.sv
     ${PROJECT_SOURCE_DIR}/src/addr_decode_dync.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_2phase.sv
-    # ${PROJECT_SOURCE_DIR}/src/cdc_4phase.sv
+    ${PROJECT_SOURCE_DIR}/src/cdc_4phase.sv
     # ${PROJECT_SOURCE_DIR}/src/cb_filter.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_fifo_2phase.sv
     ${PROJECT_SOURCE_DIR}/src/counter.sv
@@ -79,7 +79,7 @@ ip_sources(${IP} SYSTEMVERILOG
     ${PROJECT_SOURCE_DIR}/src/lzc.sv
     # ${PROJECT_SOURCE_DIR}/src/max_counter.sv
     # ${PROJECT_SOURCE_DIR}/src/rstgen.sv
-    # ${PROJECT_SOURCE_DIR}/src/spill_register.sv # unsupported 'parameter type' by TMRG
+    ${PROJECT_SOURCE_DIR}/src/spill_register.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/stream_delay.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/stream_fifo.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/stream_fork_dynamic.sv
@@ -87,7 +87,7 @@ ip_sources(${IP} SYSTEMVERILOG
     # Level 2
     ${PROJECT_SOURCE_DIR}/src/addr_decode.sv
     # ${PROJECT_SOURCE_DIR}/src/addr_decode_napot.sv
-    # ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr.sv
+    ${PROJECT_SOURCE_DIR}/src/cdc_reset_ctrlr.sv
     # ${PROJECT_SOURCE_DIR}/src/cdc_fifo_gray.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/fall_through_register.sv # unsupported 'parameter type' by TMRG
     # ${PROJECT_SOURCE_DIR}/src/id_queue.sv # unsupported 'parameter type' by TMRG
