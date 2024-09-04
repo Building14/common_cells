@@ -122,7 +122,7 @@ module addr_decode_dync #(
       end
     end
   end
-  
+
   // tmrg copy start
   // Assumptions and assertions
   `ifndef COMMON_CELLS_ASSERTS_OFF

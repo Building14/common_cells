@@ -99,7 +99,7 @@ module rr_arb_tree #(
   output logic    [NumIn-1:0] gnt_o,
   /* verilator lint_on UNOPTFLAT */
   /// Input data for arbitration.
-  input  logic [DataWidth-1:0] [NumIn-1:0] data_i,
+  input  logic [NumIn-1:0] [DataWidth-1:0] data_i,
   /// Output request is valid.
   output logic                req_o,
   /// Output request is granted.

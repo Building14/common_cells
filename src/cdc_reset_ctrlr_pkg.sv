@@ -24,4 +24,4 @@ typedef enum logic[1:0] {
   CLEAR_PHASE_POST_CLEAR
 } clear_seq_phase_e;
 
-endpackage
+endpackage // cdc_reset_ctrlr_pkg
