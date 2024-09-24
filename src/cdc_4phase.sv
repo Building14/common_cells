@@ -89,12 +89,12 @@
 
 
 /// Half of the 4-phase clock domain crossing located in the source domain.
-module cdc_4phase_src #(
+module cdc_4phase_src import cdc_reset_ctrlr_pkg::*; #(
   // parameter type T = logic,
   parameter int unsigned SYNC_STAGES = 2,
   parameter bit DECOUPLED = 1'b1,
   parameter bit SEND_RESET_MSG = 1'b0,
-  parameter cdc_reset_ctrlr_pkg::clear_seq_phase_e RESET_MSG = '0
+  parameter clear_seq_phase_e RESET_MSG = CLEAR_PHASE_IDLE
 )(
   input  logic rst_ni,
   input  logic clk_i,
