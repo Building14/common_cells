@@ -19,6 +19,7 @@ module sync #(
     input  logic serial_i,
     output logic serial_o
 );
+    // tmrg tmr_error true
 
    (* dont_touch = "true" *)
    (* async_reg = "true" *)
