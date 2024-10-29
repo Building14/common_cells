@@ -79,7 +79,7 @@ set(SV_FILES
     # ${PROJECT_SOURCE_DIR}/src/ecc_decode.sv
     # ${PROJECT_SOURCE_DIR}/src/ecc_encode.sv
     # ${PROJECT_SOURCE_DIR}/src/edge_detect.sv # Reference so sync_wedge
-    ${PROJECT_SOURCE_DIR}/src/lzc.sv
+    # ${PROJECT_SOURCE_DIR}/src/lzc.sv # TODO: might needed for single obiTMR
     # ${PROJECT_SOURCE_DIR}/src/max_counter.sv
     # ${PROJECT_SOURCE_DIR}/src/rstgen.sv
     ${PROJECT_SOURCE_DIR}/src/spill_register.sv # unsupported 'parameter type' by TMRG
@@ -154,12 +154,15 @@ add_ip(common_cells
 ip_sources(${IP} SYSTEMVERILOG ${SV_FILES})
 
 ip_link(${IP} 
-    pulp_platform::ip::tech_cells_generic
+    pulp_platform::ip::common_cells
 )
 
 # Set the sources for triplication with TMRG
 set_tmrg_sources(${IP} 
     ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
+    ${PROJECT_SOURCE_DIR}/src/lzc.sv
 )
 
 tmrg(${IP} SED_WOR NO_COMMON_DEFINITIONS REPLACE)
+
+# add_dependencies(${IP}_tmrg pulp_platform::ip::common_cells)
