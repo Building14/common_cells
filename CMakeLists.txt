@@ -160,7 +160,6 @@ ip_link(${IP}
 # Set the sources for triplication with TMRG
 set_tmrg_sources(${IP} 
     ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
-    ${PROJECT_SOURCE_DIR}/src/lzc.sv
 )
 
 tmrg(${IP} SED_WOR NO_COMMON_DEFINITIONS REPLACE)
