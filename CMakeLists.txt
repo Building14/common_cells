@@ -21,7 +21,7 @@ ip_include_directories(${IP} SYSTEMVERILOG
     ${PROJECT_SOURCE_DIR}/include/common_cells
 )
 
-ip_sources(${IP} SYSTEMVERILOG
+set(SV_FILES
     # Source files grouped in levels. Files in level 0 have no dependencies on files in this
     # package. Files in level 1 only depend on files in level 0, files in level 2 on files in
     # levels 1 and 0, etc. Files within a level are ordered alphabetically.
@@ -132,9 +132,35 @@ ip_sources(${IP} SYSTEMVERILOG
     # ${PROJECT_SOURCE_DIR}/src/edge_propagator.sv
     # ${PROJECT_SOURCE_DIR}/src/edge_propagator_rx.sv
 )
+ip_sources(${IP} SYSTEMVERILOG ${SV_FILES})
 
 ip_link(${IP} pulp_platform::ip::tech_cells_generic)
 
 if(NOT PROJECT_IS_TOP_LEVEL)
     set(RTL_LIB_NAME ${IP} PARENT_SCOPE)
 endif()
+
+######################################
+#### Common Cells TMR ####
+######################################
+
+
+add_ip(common_cells
+    VENDOR pulp_platform
+    LIBRARY ip_tmr
+    VERSION 1.33.1
+)
+
+ip_sources(${IP} SYSTEMVERILOG ${SV_FILES})
+
+ip_link(${IP} 
+    pulp_platform::ip::tech_cells_generic
+)
+
+# Set the sources for triplication with TMRG
+set_tmrg_sources(${IP} 
+    ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
+    ${PROJECT_SOURCE_DIR}/src/lzc.sv
+)
+
+tmrg(${IP} SED_WOR NO_COMMON_DEFINITIONS REPLACE)
