@@ -127,6 +127,7 @@ module rr_arb_tree #(
   // tmrg ignore stop
 
   // just pass through in this corner case
+  // tmrg ignore start
   if (NumIn == unsigned'(1)) begin : gen_pass_through
     assign req_o    = req_i[0];
     assign gnt_o[0] = gnt_i;
@@ -134,6 +135,7 @@ module rr_arb_tree #(
     assign idx_o    = '0;
   // non-degenerate cases
   end else begin : gen_arbiter
+  // tmrg ignore stop
     localparam int unsigned NumLevels = unsigned'($clog2(NumIn));
 
     /* verilator lint_off UNOPTFLAT */
@@ -367,6 +369,8 @@ module rr_arb_tree #(
     `endif
     `endif
     // tmrg ignore stop
+// tmrg ignore start
   end
+// tmrg ignore stop
 
 endmodule : rr_arb_tree
