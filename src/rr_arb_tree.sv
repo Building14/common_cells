@@ -126,16 +126,38 @@ module rr_arb_tree #(
   `endif
   // tmrg ignore stop
 
+  // pulled out FF signals so they are within scope of inserted TMR voters
+  // assign them to unused if not needed within if/else scope
+  idx_t             rr_q;
+  logic [NumIn-1:0] req_q;
+  logic             lock_q;
+
+  // voted signals for triplication
+  wire idx_t            rr_qVoted;
+  wire [NumIn-1:0]      req_qVoted;
+  wire                  lock_qVoted;
+  assign rr_qVoted      = rr_q;
+  assign lock_qVoted    = lock_q;
+  assign req_qVoted     = req_q;
+
   // just pass through in this corner case
-  // tmrg ignore start
   if (NumIn == unsigned'(1)) begin : gen_pass_through
     assign req_o    = req_i[0];
     assign gnt_o[0] = gnt_i;
     assign data_o   = data_i[0];
     assign idx_o    = '0;
+    logic unused_lock_q, unused_req_q, unused_lock_qVoted, unused_req_qVoted;
+    idx_t unused_rr_q, unused_rr_qVoted;
+
+    assign unused_lock_q = lock_q;
+    assign unused_req_q  = req_q;
+    assign unused_rr_q   = rr_q;
+    assign unused_req_qVoted = req_qVoted;
+    assign unused_rr_qVoted  = rr_qVoted;
+    assign unused_lock_qVoted = lock_qVoted;
+    
   // non-degenerate cases
   end else begin : gen_arbiter
-  // tmrg ignore stop
     localparam int unsigned NumLevels = unsigned'($clog2(NumIn));
 
     /* verilator lint_off UNOPTFLAT */
@@ -144,11 +166,7 @@ module rr_arb_tree #(
     logic    [2**NumLevels-2:0] gnt_nodes;   // used to propagate the grant to masters
     logic    [2**NumLevels-2:0] req_nodes;   // used to propagate the requests to slave
     /* lint_off */
-    idx_t                       rr_q;
 
-    // voted signals for triplication
-    wire idx_t                  rr_qVoted;
-    assign rr_qVoted = rr_q;
 
     logic [NumIn-1:0]           req_d;
 
@@ -166,13 +184,6 @@ module rr_arb_tree #(
       // lock arbiter decision in case we got at least one req and no acknowledge
       if (LockIn) begin : gen_lock
         logic  lock_d, lock_q;
-        logic [NumIn-1:0] req_q;
-
-        // voted signals for triplication
-        wire lock_qVoted;
-        wire req_qVoted;
-        assign  lock_qVoted = lock_q;
-        assign  req_qVoted = req_q;
 
         assign lock_d     = req_o & ~gnt_i;
         assign req_d      = (lock_qVoted) ? req_qVoted : req_i;
@@ -369,8 +380,6 @@ module rr_arb_tree #(
     `endif
     `endif
     // tmrg ignore stop
-// tmrg ignore start
   end
-// tmrg ignore stop
 
 endmodule : rr_arb_tree
