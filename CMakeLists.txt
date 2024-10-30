@@ -6,13 +6,15 @@
 cmake_minimum_required(VERSION 3.25)
 project(common_cells NONE)
 
+set(COMMON_CELLS_VERSION 0.0.3 CACHE INTERNAL "Version of the common_cells IP")
+
 # Fetch dependencies
 include("deps/deps.cmake")
 
 add_ip(common_cells
     VENDOR pulp_platform
     LIBRARY ip
-    VERSION 1.33.1
+    VERSION ${COMMON_CELLS_VERSION}
 )
 
 # include/common_cells/registers.svh
@@ -79,7 +81,7 @@ set(SV_FILES
     # ${PROJECT_SOURCE_DIR}/src/ecc_decode.sv
     # ${PROJECT_SOURCE_DIR}/src/ecc_encode.sv
     # ${PROJECT_SOURCE_DIR}/src/edge_detect.sv # Reference so sync_wedge
-    # ${PROJECT_SOURCE_DIR}/src/lzc.sv # TODO: might needed for single obiTMR
+    ${PROJECT_SOURCE_DIR}/src/lzc.sv
     # ${PROJECT_SOURCE_DIR}/src/max_counter.sv
     # ${PROJECT_SOURCE_DIR}/src/rstgen.sv
     ${PROJECT_SOURCE_DIR}/src/spill_register.sv # unsupported 'parameter type' by TMRG
@@ -136,10 +138,6 @@ ip_sources(${IP} SYSTEMVERILOG ${SV_FILES})
 
 ip_link(${IP} pulp_platform::ip::tech_cells_generic)
 
-if(NOT PROJECT_IS_TOP_LEVEL)
-    set(RTL_LIB_NAME ${IP} PARENT_SCOPE)
-endif()
-
 ######################################
 #### Common Cells TMR ####
 ######################################
@@ -148,21 +146,19 @@ endif()
 add_ip(common_cells
     VENDOR pulp_platform
     LIBRARY ip_tmr
-    VERSION 1.33.1
+    VERSION ${COMMON_CELLS_VERSION}
 )
 
-ip_sources(${IP} SYSTEMVERILOG ${SV_FILES})
+ip_sources(${IP} SYSTEMVERILOG ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv)
 
-ip_link(${IP} 
+# Link to non-TMR IP for cells than are not explicitly triplicated
+ip_link(${IP}
     pulp_platform::ip::common_cells
 )
 
 # Set the sources for triplication with TMRG
-set_tmrg_sources(${IP} 
+set_tmrg_sources(${IP}
     ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
-    ${PROJECT_SOURCE_DIR}/src/lzc.sv
 )
 
 tmrg(${IP} SED_WOR NO_COMMON_DEFINITIONS REPLACE)
-
-# add_dependencies(${IP}_tmrg pulp_platform::ip::common_cells)
