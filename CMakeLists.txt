@@ -136,7 +136,7 @@ set(SV_FILES
 )
 ip_sources(${IP} SYSTEMVERILOG ${SV_FILES})
 
-ip_link(${IP} pulp_platform::ip::tech_cells_generic)
+# ip_link(${IP} pulp_platform::ip::tech_cells_generic)
 
 ######################################
 #### Common Cells TMR ####
