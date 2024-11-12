@@ -133,12 +133,9 @@ module rr_arb_tree #(
   logic             lock_q;
 
   // voted signals for triplication
-  wire idx_t            rr_qVoted;
-  wire [NumIn-1:0]      req_qVoted;
-  wire                  lock_qVoted;
-  assign rr_qVoted      = rr_q;
-  assign lock_qVoted    = lock_q;
-  assign req_qVoted     = req_q;
+  wire idx_t       rr_qVoted   = rr_q;
+  wire [NumIn-1:0] req_qVoted  = req_q;
+  wire             lock_qVoted = lock_q;
 
   // just pass through in this corner case
   if (NumIn == unsigned'(1)) begin : gen_pass_through
@@ -146,16 +143,12 @@ module rr_arb_tree #(
     assign gnt_o[0] = gnt_i;
     assign data_o   = data_i[0];
     assign idx_o    = '0;
-    logic unused_lock_q, unused_req_q, unused_lock_qVoted, unused_req_qVoted;
-    idx_t unused_rr_q, unused_rr_qVoted;
 
-    assign unused_lock_q = lock_q;
-    assign unused_req_q  = req_q;
-    assign unused_rr_q   = rr_q;
-    assign unused_req_qVoted = req_qVoted;
-    assign unused_rr_qVoted  = rr_qVoted;
-    assign unused_lock_qVoted = lock_qVoted;
-    
+    // Assign default values to unused signals
+    assign rr_q   = '0;
+    assign req_q  = '0;
+    assign lock_q = '0;
+
   // non-degenerate cases
   end else begin : gen_arbiter
     localparam int unsigned NumLevels = unsigned'($clog2(NumIn));
@@ -178,12 +171,14 @@ module rr_arb_tree #(
     if (ExtPrio) begin : gen_ext_rr
       assign rr_q       = rr_i;
       assign req_d      = req_i;
+      assign lock_q     = '0;
+      assign req_q      = '0;
     end else begin : gen_int_rr
       idx_t rr_d;
 
       // lock arbiter decision in case we got at least one req and no acknowledge
       if (LockIn) begin : gen_lock
-        logic  lock_d, lock_q;
+        logic  lock_d;
 
         assign lock_d     = req_o & ~gnt_i;
         assign req_d      = (lock_qVoted) ? req_qVoted : req_i;
@@ -231,7 +226,9 @@ module rr_arb_tree #(
           end
         end
       end else begin : gen_no_lock
-        assign req_d = req_i;
+        assign req_d  = req_i;
+        assign lock_q = '0;
+        assign req_q  = '0;
       end
 
       if (FairArb) begin : gen_fair_arb
