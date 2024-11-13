@@ -39,48 +39,54 @@ module fifo_v3 #(
     // clock gating control
     logic gate_clock;
     // pointer to the read and write section of the queue
-    logic [ADDR_DEPTH - 1:0] read_pointer_n, read_pointer_q, write_pointer_n, write_pointer_q;
+    logic [ADDR_DEPTH - 1:0] read_pointer_n, read_pointer_q, read_pointer_qVoted, write_pointer_n, write_pointer_q, write_pointer_qVoted;
     // keep a counter to keep track of the current queue status
     // this integer will be truncated by the synthesis tool
-    logic [ADDR_DEPTH:0] status_cnt_n, status_cnt_q;
+    logic [ADDR_DEPTH:0] status_cnt_n, status_cnt_q, status_cnt_qVoted;
     // actual memory
-    logic [FifoDepth - 1:0] [DATA_WIDTH-1:0] mem_n, mem_q;
+    logic [FifoDepth - 1:0] [DATA_WIDTH-1:0] mem_n, mem_q, mem_qVoted;
 
-    assign usage_o = status_cnt_q[ADDR_DEPTH-1:0];
+    // Voter signal assignements
+    assign mem_qVoted = mem_q;
+    assign read_pointer_qVoted = read_pointer_q;
+    assign write_pointer_qVoted = write_pointer_q;
+    assign status_cnt_qVoted = status_cnt_q;
+
+    assign usage_o = status_cnt_qVoted[ADDR_DEPTH-1:0];
 
     if (DEPTH == 0) begin : gen_pass_through
         assign empty_o     = ~push_i;
         assign full_o      = ~pop_i;
     end else begin : gen_fifo
-        assign full_o       = (status_cnt_q == FifoDepth[ADDR_DEPTH:0]);
-        assign empty_o      = (status_cnt_q == 0) & ~(FALL_THROUGH & push_i);
+        assign full_o       = (status_cnt_qVoted == FifoDepth[ADDR_DEPTH:0]);
+        assign empty_o      = (status_cnt_qVoted == 0) & ~(FALL_THROUGH & push_i);
     end
     // status flags
 
     // read and write queue logic
     always_comb begin : read_write_comb
         // default assignment
-        read_pointer_n  = read_pointer_q;
-        write_pointer_n = write_pointer_q;
-        status_cnt_n    = status_cnt_q;
-        data_o          = (DEPTH == 0) ? data_i : mem_q[read_pointer_q];
-        mem_n           = mem_q;
+        read_pointer_n  = read_pointer_qVoted;
+        write_pointer_n = write_pointer_qVoted;
+        status_cnt_n    = status_cnt_qVoted;
+        data_o          = (DEPTH == 0) ? data_i : mem_qVoted[read_pointer_qVoted];
+        mem_n           = mem_qVoted;
         gate_clock      = 1'b1;
 
         // push a new element to the queue
         if (push_i && ~full_o) begin
             // push the data onto the queue
-            mem_n[write_pointer_q] = data_i;
+            mem_n[write_pointer_qVoted] = data_i;
             // un-gate the clock, we want to write something
             gate_clock = 1'b0;
             // increment the write counter
             // this is dead code when DEPTH is a power of two
-            if (write_pointer_q == FifoDepth[ADDR_DEPTH-1:0] - 1)
+            if (write_pointer_qVoted == FifoDepth[ADDR_DEPTH-1:0] - 1)
                 write_pointer_n = '0;
             else
-                write_pointer_n = write_pointer_q + 1;
+                write_pointer_n = write_pointer_qVoted + 1;
             // increment the overall counter
-            status_cnt_n    = status_cnt_q + 1;
+            status_cnt_n    = status_cnt_qVoted + 1;
         end
 
         if (pop_i && ~empty_o) begin
@@ -90,22 +96,22 @@ module fifo_v3 #(
             if (read_pointer_n == FifoDepth[ADDR_DEPTH-1:0] - 1)
                 read_pointer_n = '0;
             else
-                read_pointer_n = read_pointer_q + 1;
+                read_pointer_n = read_pointer_qVoted + 1;
             // ... and decrement the overall count
-            status_cnt_n   = status_cnt_q - 1;
+            status_cnt_n   = status_cnt_qVoted - 1;
         end
 
         // keep the count pointer stable if we push and pop at the same time
         if (push_i && pop_i &&  ~full_o && ~empty_o)
-            status_cnt_n   = status_cnt_q;
+            status_cnt_n   = status_cnt_qVoted;
 
         // FIFO is in pass through mode -> do not change the pointers
-        if (FALL_THROUGH && (status_cnt_q == 0) && push_i) begin
+        if (FALL_THROUGH && (status_cnt_qVoted == 0) && push_i) begin
             data_o = data_i;
             if (pop_i) begin
-                status_cnt_n = status_cnt_q;
-                read_pointer_n = read_pointer_q;
-                write_pointer_n = write_pointer_q;
+                status_cnt_n = status_cnt_qVoted;
+                read_pointer_n = read_pointer_qVoted;
+                write_pointer_n = write_pointer_qVoted;
             end
         end
     end

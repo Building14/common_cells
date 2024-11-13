@@ -149,7 +149,10 @@ add_ip(common_cells
     VERSION ${COMMON_CELLS_VERSION}
 )
 
-ip_sources(${IP} SYSTEMVERILOG ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv)
+ip_sources(${IP} SYSTEMVERILOG
+    ${PROJECT_SOURCE_DIR}/src/fifo_v3.sv
+    ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
+)
 
 # Link to non-TMR IP for cells than are not explicitly triplicated
 ip_link(${IP}
@@ -158,6 +161,7 @@ ip_link(${IP}
 
 # Set the sources for triplication with TMRG
 set_tmrg_sources(${IP}
+    ${PROJECT_SOURCE_DIR}/src/fifo_v3.sv
     ${PROJECT_SOURCE_DIR}/src/rr_arb_tree.sv
 )
 
