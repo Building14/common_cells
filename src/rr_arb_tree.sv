@@ -109,6 +109,8 @@ module rr_arb_tree #(
   /// Index from which input the data came from.
   output logic [IdxWidth-1:0]                idx_o
 );
+  // tmrg default triplicate
+  // tmrg tmr_error true
 
   typedef logic [IdxWidth-1:0] idx_t;
   typedef logic [DataWidth-1:0] DataType;
