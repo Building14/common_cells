@@ -24,16 +24,18 @@ module sync #(
    (* dont_touch = "true" *)
    (* async_reg = "true" *)
    logic [STAGES-1:0] reg_q;
-   wire [STAGES-1:0] reg_qVoted = reg_q;
+   logic serial;
+   wire serialVoted = serial;
 
     always_ff @(posedge clk_i, negedge rst_ni) begin
         if (!rst_ni) begin
             reg_q <= {STAGES{ResetValue}};
         end else begin
-            reg_q <= {reg_qVoted[STAGES-2:0], serial_i};
+            reg_q <= {reg_q[STAGES-2:0], serial_i};
         end
     end
 
-    assign serial_o = reg_qVoted[STAGES-1];
+    assign serial = reg_q[STAGES-1];
+    assign serial_o = serialVoted;
 
 endmodule
