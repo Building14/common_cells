@@ -8,9 +8,6 @@ project(common_cells NONE)
 
 set(COMMON_CELLS_VERSION 0.0.3 CACHE INTERNAL "Version of the common_cells IP")
 
-# Fetch dependencies
-include("deps/deps.cmake")
-
 add_ip(common_cells
     VENDOR pulp_platform
     LIBRARY ip
